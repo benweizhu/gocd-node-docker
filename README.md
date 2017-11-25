@@ -1,4 +1,4 @@
-# gocd-node-docker
+# GOCD Docker with NodeJS
 
 Need add PATH environment variable to Pipeline for node command. For example:
 
