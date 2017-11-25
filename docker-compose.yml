@@ -1,0 +1,13 @@
+version: '3'
+services:
+  go-agent:
+    build: .
+    links:
+      - go-server
+    environment:
+      GO_SERVER_URL: https://go-server:8154/go
+  go-server:
+    image: gocd/gocd-server:v17.11.0
+    ports:
+      - '8153:8153'
+      - '8154:8154'
