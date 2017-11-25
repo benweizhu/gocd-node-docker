@@ -1,16 +1,14 @@
 FROM gocd/gocd-agent-ubuntu-16.04:v17.11.0
 
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+USER go
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
 
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 6.12.0
+USER root
+RUN /bin/bash -c "echo \"[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh\" >> /etc/profile.d/npm.sh"
 
-# Install nvm with node and npm
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash \
-    && source $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
+USER go
+RUN /bin/bash -c "source $HOME/.nvm/nvm.sh && nvm install v6.10.0"
+RUN echo "[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh" >> $HOME/.bashrc
+ENV PATH $HOME/.nvm/bin:$PATH
 
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+USER root
